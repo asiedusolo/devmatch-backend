@@ -1,8 +1,20 @@
-FROM node:slim
+# Dockerfile.dev
+FROM node:18-alpine
+
 WORKDIR /app
+
+# Install dependencies first for better caching
 COPY package*.json ./
 RUN npm install
-COPY . .
+
+# Install NestJS CLI globally for better watch mode
+RUN npm install -g @nestjs/cli
+
+# Copy all files
+COPY . ./
+
+# Set up environment variables
 ENV PORT 3000
-EXPOSE ${PORT}
+EXPOSE $PORT
+
 CMD ["npm", "run", "start:dev"]
